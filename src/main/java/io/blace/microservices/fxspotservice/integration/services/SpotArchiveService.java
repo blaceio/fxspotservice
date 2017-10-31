@@ -6,11 +6,13 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 import com.jimmoores.quandl.DataSetRequest;
+import com.jimmoores.quandl.SessionOptions;
 import com.jimmoores.quandl.TabularResult;
 import com.jimmoores.quandl.classic.ClassicQuandlSession;
 
@@ -23,6 +25,9 @@ public class SpotArchiveService {
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
+	@Value("${quandl.apikey}")
+	private String quandlapikey;
+	
 	@Autowired
 	private FxSpotRepository fxspotrepo;
 	
@@ -31,7 +36,7 @@ public class SpotArchiveService {
 		
 		logger.info( "sourcequandlrates " + _request.toString());
 		
-		ClassicQuandlSession session = ClassicQuandlSession.create();
+		ClassicQuandlSession session = ClassicQuandlSession.create(SessionOptions.Builder.withAuthToken(quandlapikey).build());
 		TabularResult quandlresult = session.getDataSet(
 		DataSetRequest.Builder
 		.of(_request.getSource() + "/" + _request.getCode())
