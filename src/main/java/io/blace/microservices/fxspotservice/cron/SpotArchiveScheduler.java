@@ -24,8 +24,8 @@ public class SpotArchiveScheduler {
 	
 	@Autowired
 	private SpotArchiveGateway spotarchivegateway;
-	
-	@Scheduled(cron="0 0 6 * * *")
+
+	@Scheduled(cron="${quandl.schedule}")
 	public void triggerarchive() {
 		
 		logger.info("Spot Archive Triggered");
